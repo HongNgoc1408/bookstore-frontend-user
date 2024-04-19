@@ -1,6 +1,6 @@
 <template>
     <div class="container">
-        <div class="mt-5">
+        <div class="my-5">
             <CartList :products="cart" />
         </div>
     </div>

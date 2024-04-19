@@ -18,7 +18,7 @@
                         <hr>
                         <h4 class="text-center mt-5">Giỏ hàng của tôi</h4>
                         <div v-if="products.length === 0" class="text-center my-5">
-                            <img src="../../assets/cart-empty.webp" alt="" srcset="">
+                            <img src="../../assets/cart-empty.webp" alt="">
                         </div>
 
                         <div v-else>
@@ -94,6 +94,7 @@
 <script>
 import CartService from "@/services/cart.service";
 import BorrowService from "@/services/borrow.service";
+import BookService from "@/services/book.service";
 
 export default {
     props: {
@@ -130,7 +131,6 @@ export default {
                     name: product.name,
                     bookId: product._id,
                     quantity: product.quantity,
-                    countInStock: product.countInStock
                 });
             });
         },
@@ -150,9 +150,18 @@ export default {
             };
 
             try {
-                console.log(loanInfo);
+                // console.log(loanInfo);
                 await BorrowService.add(loanInfo);
                 await CartService.deleteCart(this.userId);
+                for (let i = 0; i < loanInfo.books.length; i++) {
+                    const bookId = loanInfo.books[i].bookId;
+                    const bookInfo = await BookService.get(bookId);
+                    const data = {
+                        countInStock: bookInfo.countInStock - loanInfo.books[i].quantity,
+                        quantity: loanInfo.books[i].quantity,
+                    };
+                    await BookService.update(bookId, data);
+                }
                 alert("Bạn đã đăng ký mượn thành công, vui lòng chờ duyệt đơn!");
                 window.location.reload();
             } catch (err) {

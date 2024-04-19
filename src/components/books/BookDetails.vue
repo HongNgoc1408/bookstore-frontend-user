@@ -36,25 +36,34 @@
                             <h6><strong>Mô tả:</strong></h6>
                             <p class="about">{{ bookLocal.description }}</p>
                             <div class="quantity-control mb-3">
-                                <button class="btn btn-icon btn-secondary" @click="decreaseQuantity">
+                                <button class="col-auto btn btn-icon btn-outline-warning text-dark"
+                                    @click="decreaseQuantity">
                                     <i class="fa fa-minus"></i>
                                 </button>
-                                <span class="mx-2">{{ quantity }}</span>
-                                <button class="btn btn-icon btn-secondary" @click="increaseQuantity">
+                                <span class="mx-3 my-3 p-2">
+                                    <input
+                                        class="d-inline-flex focus-ring focus-ring-warning py-1 px-2 text-decoration-none border rounded-2"
+                                        type="number" id="quantity" name="quantity" v-model="quantity">
+                                </span>
+                                <!-- <span class="mx-2">{{quantity}}</span> -->
+                                <button class="col-auto btn btn-icon btn-outline-warning text-dark"
+                                    @click="increaseQuantity">
                                     <i class="fa fa-plus"></i>
                                 </button>
+
                             </div>
-                            <div v-if="userId" class="cart mt-4 align-items-center">
-                                <button class="btn btn-primary text-uppercase mr-2 px-4 mx-1" @click="addToCart">
+                            <div v-if="userId" class="cart align-items-center">
+                                <button class="my-2 btn btn-outline-warning text-dark text-uppercase mr-2 px-4 mx-1"
+                                    @click="addToCart">
                                     Thêm vào giỏ hàng
                                 </button>
                                 <router-link :to="{ name: 'cartpage', params: { id: userId } }"
-                                    class="btn btn-primary text-uppercase mr-2 px-4 mx-1">
+                                    class="my-2 btn btn-outline-warning text-dark text-uppercase mr-2 px-4 mx-1">
                                     Đi vào mượn sách
                                 </router-link>
-                                <i class="fa fa-heart ms-3 me-3 fs-3"
+                                <i class="my-2 fa fa-heart ms-3 me-3 fs-3"
                                     :class="{ 'text-muted': !check, 'text-danger': check }" @click="changeFavorite"></i>
-                                <i class="fa fa-share-alt text-muted fs-3"></i>
+                                <i class="my-2 fa fa-share-alt fs-3 text-primary"></i>
                             </div>
                         </div>
                     </div>
@@ -91,12 +100,17 @@ export default {
     methods: {
         async checkFavorite() {
             const id = localStorage.getItem("userId");
+            if (!id) return;
             const userFavorites = await FavoriteService.get(id);
             this.check = userFavorites.bookId.includes(this.book._id);
-            console.log(this.check);
+            // console.log(this.check);
         },
         async changeFavorite() {
             const id = localStorage.getItem("userId");
+            if (!id) {
+                this.$router.push({ name: 'login' });
+                return;
+            }
             const bookId = this.book._id;
             const userFavorites = await FavoriteService.get(id);
             const check = userFavorites.bookId.includes(this.book._id);
@@ -118,10 +132,21 @@ export default {
         async addToCart() {
             const quantity = this.quantity;
             const userId = localStorage.getItem("userId");
+            if (!userId) {
+                this.$router.push({ name: 'login' });
+                return;
+            }
             const bookId = this.book._id;
-            const countInStock = this.book.countInStock;
-            
-            const books = [{ bookId, quantity, countInStock }];
+            const countInStock = this.bookLocal.countInStock;
+
+            if (quantity < 1) {
+                alert("Số lượng phải lớn hơn 0.");
+                return;
+            } else if (quantity > countInStock) {
+                alert("Số lượng vượt quá số lượng trong kho.");
+                return;
+            }
+            const books = [{ bookId, quantity }];
             const cartData = { userId, books };
 
             try {
@@ -135,6 +160,9 @@ export default {
                 alert("Đã xảy ra lỗi khi thêm vào giỏ hàng. Vui lòng thử lại sau!");
             }
         },
+
+
+
 
         increaseQuantity() {
             if (this.quantity < this.bookLocal.countInStock) {

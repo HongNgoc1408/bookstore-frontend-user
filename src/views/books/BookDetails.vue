@@ -1,6 +1,6 @@
 <template>
     <div class="container">
-        <h6 class="mb-3 text-primary">
+        <h6 class="text-primary">
             <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item"><router-link :to="{ name: 'bookstore' }" class="nav-link">
@@ -10,7 +10,7 @@
                 </ol>
             </nav>
         </h6>
-        <div class="mt-5">
+        <div>
             <BookDetails v-if="book" :book="book" />
             <div v-else>
                 <p>Không có thông tin sách.</p>

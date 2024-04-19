@@ -17,11 +17,11 @@ export default {
 
 <template>
 
-    <div class="input-group mb-3">
-        <input type="text" class="form-control" placeholder="Nhập thông tin cần tìm" :value="modelValue"
+    <div class="input-group">
+        <input type="text" class="form-control fw-semibold" placeholder="Nhập thông tin cần tìm" :value="modelValue"
             @input="updateModelValue" @keyup.enter="submit" />
 
-        <button class="btn btn-outline-warning text-dark" type="button" @click="submit">
+        <button class="btn btn-outline-warning text-dark fw-semibold" type="button" @click="submit">
             <i class="fas fa-search"></i> Tìm kiếm
         </button>
 

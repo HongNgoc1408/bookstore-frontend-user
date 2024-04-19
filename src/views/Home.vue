@@ -1,13 +1,13 @@
 <template>
   <div class="container">
     <div class="row">
-      <div class="col-md-6"></div>
-      <div class="col-md-6 d-flex">
+      <div class="col-1"></div>
+      <div class="col-10 d-flex">
         <InputSearch v-model="searchText" />
       </div>
     </div>
 
-    <div class="row mt-3 ">
+    <div class="row">
       <BookList v-if="filteredBooks.length > 0" :books="filteredBooks" :activeIndex="activeIndex" />
       <p v-else>Không có sách nào.</p>
     </div>
@@ -67,9 +67,9 @@ export default {
   mounted() {
     this.refreshList();
   },
- 
-    // Các route khác
-  
+
+  // Các route khác
+
 };
 </script>
 

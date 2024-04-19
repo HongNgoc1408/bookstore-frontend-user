@@ -1,5 +1,5 @@
 <template>
-    <nav class="navbar navbar-expand-lg navbar-light text-semibold" style="background-color: bisque;">
+    <nav class="navbar navbar-expand-lg navbar-light fw-semibold" style="background-color: bisque;">
         <div class="container">
             <router-link :to="{ name: 'bookstore' }" class="navbar-brand nav-link">
                 Kho Sách
@@ -33,7 +33,7 @@
 
                 <div class="d-flex dropdown">
                     <div v-if="userName">
-                        <button class="btn btn-outline-warning text-dark dropdown-toggle" type="button"
+                        <button class="btn btn-outline-warning text-dark fw-semibold dropdown-toggle" type="button"
                             id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
                             {{ userName }}
                         </button>
@@ -49,7 +49,7 @@
                     </div>
 
                     <div v-else>
-                        <button class="btn btn-outline-warning text-dark dropdown-toggle" type="button"
+                        <button class="btn btn-outline-warning text-dark fw-semibold dropdown-toggle" type="button"
                             id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
                             Tài khoản
                         </button>

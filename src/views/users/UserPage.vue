@@ -1,7 +1,5 @@
 <template>
-
     <div class="container">
-        
         <h4 class="text-center">Hồ sơ của tôi</h4>
         <div class="mx-auto">
             <UserForm :user="user" @submit:user="updateUser" />
