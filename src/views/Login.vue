@@ -36,6 +36,7 @@ export default {
                 localStorage.setItem('userId', user._id);
                 localStorage.setItem('userName', user.name);
                 window.alert("Đăng nhập thành công!")
+                window.location.href = "/";
 
                 if (user._id) {
                     this.$router.replace({ name: 'bookstore' });
