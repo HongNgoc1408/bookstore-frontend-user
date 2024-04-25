@@ -23,7 +23,7 @@
 
                         <div v-else>
                             <div v-for="(product, index) in products" :key="product._id"
-                                :class="{ active: index === activeIndex }" class="card mb-3">
+                                :class="{ active: index === activeIndex }" class="border">
                                 <div class="card-body">
                                     <div class="d-flex justify-content-between">
                                         <div class="d-flex flex-row align-items-center">
@@ -60,23 +60,23 @@
                                 </div>
                                 <form class="mt-4" @submit.prevent="submitForm">
                                     <div>
-                                        <div class="form-group mb-4 d-none ">
+                                        <div class="form-group mb-4 d-none">
                                             <label for="userId" class="form-label">User ID</label>
                                             <input type="text" id="userId" class="form-control form-control"
                                                 v-model="userId">
                                         </div>
                                         <div class="form-group mb-4">
-                                            <label for="name" class="form-label">Tên người mượn</label>
+                                            <label for="name" class="form-label"><strong>Tên người mượn</strong></label>
                                             <input type="text" id="name" class="form-control form-control"
                                                 v-model="name">
                                         </div>
                                         <div class="form-group mb-4">
-                                            <label for="ngayMuon" class="form-label">Ngày mượn</label>
+                                            <label for="ngayMuon" class="form-label"><strong>Ngày mượn</strong></label>
                                             <input type="date" id="ngayMuon" class="form-control form-control"
                                                 v-model="ngayMuon" required>
                                         </div>
                                         <button v-if="products.length > 0" type="submit"
-                                            class="btn  btn-block btn-primary">
+                                            class="btn btn-outline-warning text-dark">
                                             Đăng ký mượn sách
                                         </button>
                                     </div>
@@ -95,6 +95,7 @@
 import CartService from "@/services/cart.service";
 import BorrowService from "@/services/borrow.service";
 import BookService from "@/services/book.service";
+import UserService from "@/services/user.service";
 
 export default {
     props: {
@@ -149,6 +150,19 @@ export default {
                 books: this.books
             };
 
+            // Kiểm tra các trường thông tin trước khi mượn sách
+            if (!loanInfo.name || !loanInfo.ngayMuon || loanInfo.books.length === 0) {
+                alert("Vui lòng điền đầy đủ thông tin và chọn sách để mượn.");
+                return;
+            }
+
+            // Kiểm tra các trường thông tin cần thiết của người dùng trước khi mượn sách
+            if (!this.email || !this.phone || !this.address) {
+                alert("Vui lòng nhập đầy đủ thông tin của bạn");
+                this.$router.push({ name: 'userpage' });
+                return;
+            }
+
             try {
                 // console.log(loanInfo);
                 await BorrowService.add(loanInfo);
@@ -168,7 +182,24 @@ export default {
                 console.log("Lỗi khi mượn sách:", err);
                 alert("Đã xảy ra lỗi khi mượn sách. Vui lòng thử lại sau!");
             }
+        },
+        async getUserInfo() {
+            try {
+                // console.log("user", this.userId);
+                const response = await UserService.get(this.userId);
+                // console.log(response);
+                this.email = response.email;
+                this.phone = response.phone;
+                this.address = response.address;
+
+            } catch (error) {
+                console.error('Lỗi khi lấy thông tin người dùng:', error);
+            }
         }
+
+    },
+    mounted() {
+        this.getUserInfo();
     }
 };
 </script>

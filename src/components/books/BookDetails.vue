@@ -14,7 +14,14 @@
                     <div class="col-md-7">
                         <div class="book p-4">
                             <div class="mt-4 mb-3">
-                                <h5 class="text-uppercase mb-3">{{ bookLocal.name }}</h5>
+                                <div class="row">
+                                    <h5 class="text-uppercase mb-3">{{ bookLocal.name }} <span><i
+                                                class="my-2 fa fa-heart ms-3 me-3 fs-3"
+                                                :class="{ 'text-muted': !check, 'text-danger': check }"
+                                                @click="changeFavorite"></i></span></h5>
+
+                                </div>
+
                                 <div class="price d-flex flex-row align-items-center">
                                     <p><strong>Tác giả: </strong><span>{{ bookLocal.author }}</span></p>
                                 </div>
@@ -36,20 +43,20 @@
                             <h6><strong>Mô tả:</strong></h6>
                             <p class="about">{{ bookLocal.description }}</p>
                             <div class="quantity-control mb-3">
-                                <button class="col-auto btn btn-icon btn-outline-warning text-dark"
+                                <!-- <button class="col-auto btn btn-icon btn-outline-warning text-dark"
                                     @click="decreaseQuantity">
                                     <i class="fa fa-minus"></i>
-                                </button>
-                                <span class="mx-3 my-3 p-2">
+                                </button> -->
+                                <span class=" p-2">
                                     <input
                                         class="d-inline-flex focus-ring focus-ring-warning py-1 px-2 text-decoration-none border rounded-2"
                                         type="number" id="quantity" name="quantity" v-model="quantity">
                                 </span>
                                 <!-- <span class="mx-2">{{quantity}}</span> -->
-                                <button class="col-auto btn btn-icon btn-outline-warning text-dark"
+                                <!-- <button class="col-auto btn btn-icon btn-outline-warning text-dark"
                                     @click="increaseQuantity">
                                     <i class="fa fa-plus"></i>
-                                </button>
+                                </button> -->
 
                             </div>
                             <div v-if="userId" class="cart align-items-center">
@@ -61,9 +68,6 @@
                                     class="my-2 btn btn-outline-warning text-dark text-uppercase mr-2 px-4 mx-1">
                                     Đi vào mượn sách
                                 </router-link>
-                                <i class="my-2 fa fa-heart ms-3 me-3 fs-3"
-                                    :class="{ 'text-muted': !check, 'text-danger': check }" @click="changeFavorite"></i>
-                                <i class="my-2 fa fa-share-alt fs-3 text-primary"></i>
                             </div>
                         </div>
                     </div>
